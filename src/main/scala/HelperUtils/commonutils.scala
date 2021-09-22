@@ -12,8 +12,10 @@ import org.cloudbus.cloudsim.network.topologies.{BriteNetworkTopology, NetworkTo
 import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
 import org.cloudbus.cloudsim.schedulers.vm.{VmSchedulerSpaceShared, VmSchedulerTimeShared}
 import HelperUtils.CreateLogger
+import org.slf4j.Logger
 
 import java.util
+import java.util.logging.Level
 import scala.jdk.CollectionConverters.*
 import scala.util.Random
 
@@ -51,6 +53,54 @@ object commonutils {
 
   }
 
+
+  def createHost2(config: Config ) = {
+    val hostPes : Int = config.getInt("datacenter.host2.pes")
+    val peList = (1 to hostPes).map { _ =>
+      new PeSimple(1000).asInstanceOf[Pe]
+    }.toList
+    val hosts_ram: Long = config.getLong("datacenter.host2.ram")
+    val storage: Long = config.getLong("datacenter.host2.size")
+    val host_bw: Long = config.getLong("datacenter.host2.bw")
+    val vmscheduler: String = config.getString("datacenter.host2.vmscheduler")
+
+    //logger.info(s"Created one processing element")
+    //new HostSimple(hosts_ram, host_bw, storage, peList.asJava)
+
+    val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
+    host.setVmScheduler(vmscheduler match {
+      case "SpaceShared" =>
+        new VmSchedulerSpaceShared()
+      case "TimeShared" =>
+        new VmSchedulerTimeShared()
+      case _ => new VmSchedulerTimeShared()
+    })
+
+  }
+
+  def createHost3(config: Config ) = {
+    val hostPes : Int = config.getInt("datacenter.host3.pes")
+    val peList = (1 to hostPes).map { _ =>
+      new PeSimple(1000).asInstanceOf[Pe]
+    }.toList
+    val hosts_ram: Long = config.getLong("datacenter.host3.ram")
+    val storage: Long = config.getLong("datacenter.host3.size")
+    val host_bw: Long = config.getLong("datacenter.host3.bw")
+    val vmscheduler: String = config.getString("datacenter.host3.vmscheduler")
+
+    //logger.info(s"Created one processing element")
+    //new HostSimple(hosts_ram, host_bw, storage, peList.asJava)
+
+    val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
+    host.setVmScheduler(vmscheduler match {
+      case "SpaceShared" =>
+        new VmSchedulerSpaceShared()
+      case "TimeShared" =>
+        new VmSchedulerTimeShared()
+      case _ => new VmSchedulerTimeShared()
+    })
+
+  }
   /**
  * Sets a VM allocation Policy usingt the choices passed
  *
@@ -76,7 +126,7 @@ object commonutils {
    */
 
 
-  def createDatacenter (cloudSim: CloudSim,hostList: List[Host],config: Config) = {
+  def createDatacenter (cloudSim: CloudSim,hostList: List[Host],config: Config): Datacenter = {
     // Check type and create that DataCenter
     val dataCenter = config.getString("datacenter.dcType")  match {
       case "Simple" => new DatacenterSimple(cloudSim, hostList.asJava)
@@ -90,5 +140,31 @@ object commonutils {
       .setCostPerMem(config.getDouble("datacenter.costPerMem"))
       .setCostPerSecond(config.getDouble("datacenter.costPerSecond"))
       .setCostPerStorage(config.getDouble("datacenter.costPerStorage"))
+
+    dataCenter
   }
+
+  /**
+   * Not being used.
+   *
+   * @param logger          Instance of the Logger class
+   * @param level           Level of the log, can be Trace, Debug, Info, Warn (Warning), Error
+   * @param log             Log statement to be printed
+   * @return
+   */
+  def LogLevel (logger: Logger, level: String, log: String) = {
+    if (logger != null && level != null){
+      level match {
+        case "TRACE" => logger.trace(log)
+        case "DEBUG" => logger.debug(log)
+        case "INFO" => logger.info(log)
+        case "WARN" => logger.warn(log)
+        case "ERROR" => logger.error(log)
+        case _ => Exception
+      }
+    }
+  }
+
+
+
 }

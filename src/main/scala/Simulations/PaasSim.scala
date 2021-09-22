@@ -20,6 +20,7 @@ object PaasSim:
 
 
   def Start() =
+    logger.info("Simulating Platform As A Service (PaaS)")
     //Read the config file specific for IaaS
     val config: Config = ConfigFactory.load("DataCenter.conf")
 
@@ -67,7 +68,7 @@ object PaasSim:
     logger.info(s"Finished Cloudlet list: $finishedCloudlets")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
-    System.out.println("Total cost of simulation = " + Cost.executionCost(finishedCloudlets))
+    logger.info("Total cost of simulation = {} $", Cost.findCost(broker))
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
     //Uses the CloudletsTableBuilder class to build a tabular result

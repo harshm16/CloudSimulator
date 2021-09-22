@@ -1,6 +1,6 @@
 package Simulations
 
-import HelperUtils.{Cost, CreateLogger, IaaSConfRead, commonutils, createvmcloudlet_IaaS}
+import HelperUtils.{CreateLogger, IaaSConfRead, commonutils, createvmcloudlet_IaaS,Cost}
 import com.typesafe.config.{Config, ConfigFactory}
 import org.cloudbus.cloudsim.core.CloudSim
 import HelperUtils.commonutils.{createDatacenter, createHost}
@@ -26,6 +26,7 @@ object IaasSim:
 
 
   def Start() =
+    logger.info("Simulating Infrastructure As A Service (IaaS)")
     //Read the config file specific for IaaS
     val config: Config = ConfigFactory.load("DataCenter.conf")
 
@@ -37,19 +38,19 @@ object IaasSim:
 
     //Create all hosts using the createHost function
     val hostList = (1 to config.getInt("datacenter.host.number")).map(_ => createHost(config)).toList
-    logger.info(s"Created hosts")
+    logger.info("Created hosts")
 
     //Create datacenter using the above created hosts and a VM allocation policy
     //new NetworkDatacenter(cloudsim, hostList.asJava, new VmAllocationPolicyBestFit())
     createDatacenter(cloudsim, hostList,config)
-    logger.info(s"Created Virtual machines.")
+    logger.info("Created Virtual machines.")
 
     //Create a Datacenter Broker
     val broker = new DatacenterBrokerSimple(cloudsim)
 
     //Class used to fetch the VMs and Cloudlets info from the config file and append them in separate lists
     val simpleJob = new createvmcloudlet_IaaS(cloudsim, broker, serviceModel)
-    logger.info(s"Created a list of VMs and Cloudlets")
+    logger.info("Created a list of VMs and Cloudlets")
 
     //Submit the VMs list & Cloudlets to the Datacenter broker
     broker.submitVmList(simpleJob.createVMList.asJava)
@@ -73,7 +74,8 @@ object IaasSim:
     logger.info(s"Finished Cloudlet list: $finishedCloudlets")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
-    System.out.println("Total cost of simulation = " + Cost.executionCost(finishedCloudlets))
+
+    logger.info("Total cost of simulation = {} $", Cost.findCost(broker))
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
     //Uses the CloudletsTableBuilder class to build a tabular result
