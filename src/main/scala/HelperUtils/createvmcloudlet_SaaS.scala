@@ -29,7 +29,12 @@ class createvmcloudlet_SaaS(var simulation: Simulation,
     ).toList
   }
 
-
+  def createVM: Vm = {
+    new VmSimple(serviceModel.VM_MIPS, serviceModel.VM_PES)
+    .setRam(serviceModel.VM_RAM)
+    .setBw(serviceModel.VM_BW)
+    .setSize(serviceModel.VM_SIZE)
+  }
 }
   
 

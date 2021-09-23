@@ -12,6 +12,8 @@ import org.cloudbus.cloudsim.network.topologies.{BriteNetworkTopology, NetworkTo
 import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
 import org.cloudbus.cloudsim.schedulers.vm.{VmSchedulerSpaceShared, VmSchedulerTimeShared}
 import HelperUtils.CreateLogger
+import org.cloudbus.cloudsim.vms.Vm
+import org.cloudsimplus.autoscaling.{HorizontalVmScaling, HorizontalVmScalingSimple}
 import org.slf4j.Logger
 
 import java.util
@@ -164,7 +166,6 @@ object commonutils {
       }
     }
   }
-
 
 
 }
