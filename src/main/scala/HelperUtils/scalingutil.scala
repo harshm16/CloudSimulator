@@ -16,8 +16,7 @@ object scalingutil {
     (1 to vmNum).map { _ =>
       val vm: Vm = simpleJob.createVM
       createHorizontalVmScaling(vm,simpleJob)
-
-      //gather the VM
+      
       vm
     }.toList
 

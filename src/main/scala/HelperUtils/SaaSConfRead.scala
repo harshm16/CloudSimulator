@@ -2,6 +2,10 @@ package HelperUtils
 
 import com.typesafe.config.{Config, ConfigFactory}
 
+/**
+ * Class for reading Configurations for Software as a Service.
+ * Reads the configurations from confFile: "user_SaaS.conf" & dc_confFile: "DataCenter.conf"
+ */
 class SaaSConfRead(confFile: String, dc_confFile: Config){
 
   val conf: Config = ConfigFactory.load(confFile)

@@ -2,6 +2,10 @@ package HelperUtils
 
 import com.typesafe.config.{Config, ConfigFactory}
 
+/**
+ * Class for reading Configurations for Infrastructure as a Service.
+ * Reads the configurations from user_IaaS.conf file: confFile
+ */
 class IaaSConfRead(confFile: String){
 
   val conf: Config = ConfigFactory.load(confFile)

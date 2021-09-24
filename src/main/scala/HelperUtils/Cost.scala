@@ -14,8 +14,15 @@ class Cost
 
 object Cost:
 
-  private val logger = CreateLogger(classOf[Cost])
+  val logger = CreateLogger(classOf[Cost])
 
+  /**
+   * Calculates the cost of an execution, based on the Datacenters cost configurations.
+   *
+   * @param boker          DatacenterBroker object.
+
+   * @return Total cost of execution of the Simulation run.
+   */
     def findCost(broker: DatacenterBroker) : Double = {
 
       var totalCost: Double = 0.0

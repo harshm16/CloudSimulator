@@ -22,15 +22,17 @@ object ScalingSim:
 
 
   def Start() =
-    logger.info("Simulating Software As A Service (SaaS)")
+    logger.info("Simulating Software As A Service (SaaS) which provides Horizontal Scaling.")
     //Read the config file specific for IaaS
     val config: Config = ConfigFactory.load("DataCenter.conf")
 
+    logger.info("Reading user defined config.")
     //Config file that can be modfied by the user/broker, contains info about VMs requested and Cloudlets
     val serviceModel = new SaaSConfRead("user_SaaS.conf", config)
 
     //Initiate Cloudsim
     val cloudsim = new CloudSim()
+    logger.info("Initiating Cloud Sim.")
 
     //Create all hosts using the createHost function
     val hostList = (1 to config.getInt("datacenter.host.number")).map(_ => createHost(config)).toList

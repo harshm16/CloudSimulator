@@ -6,4 +6,4 @@
 
 #### This Git repo contains simulation of various Cloud architectures using the CloudSim framework. This baseline of this repo was taken from: git@github.com:0x1DOCD00D/CloudOrgSimulator.git.
 
-##Thank you
+## Thank you

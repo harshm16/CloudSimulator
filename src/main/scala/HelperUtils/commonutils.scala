@@ -12,6 +12,8 @@ import org.cloudbus.cloudsim.network.topologies.{BriteNetworkTopology, NetworkTo
 import org.cloudbus.cloudsim.resources.{Pe, PeSimple}
 import org.cloudbus.cloudsim.schedulers.vm.{VmSchedulerSpaceShared, VmSchedulerTimeShared}
 import HelperUtils.CreateLogger
+import Simulations.ScalingSim
+import org.cloudbus.cloudsim.core
 import org.cloudbus.cloudsim.vms.Vm
 import org.cloudsimplus.autoscaling.{HorizontalVmScaling, HorizontalVmScalingSimple}
 import org.slf4j.Logger
@@ -23,6 +25,8 @@ import scala.util.Random
 
 
 object commonutils {
+
+  val logger = CreateLogger(classOf[core.Simulation])
 
   /**
    * Creates host with specified Scheduler as in configuration
@@ -41,8 +45,7 @@ object commonutils {
     val host_bw: Long = config.getLong("datacenter.host.bw")
     val vmscheduler: String = config.getString("datacenter.host.vmscheduler")
 
-    //logger.info(s"Created one processing element")
-    //new HostSimple(hosts_ram, host_bw, storage, peList.asJava)
+    logger.info("Creating Datacenter hosts based on the Datacenter config.")
 
     val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
     host.setVmScheduler(vmscheduler match {
@@ -50,7 +53,11 @@ object commonutils {
         new VmSchedulerSpaceShared()
       case "TimeShared" =>
         new VmSchedulerTimeShared()
-      case _ => new VmSchedulerTimeShared()
+      case _ =>
+        logger.warn("VM Scheduling algorithm should be either TimeShared or SpaceShared.")
+        logger.info("Going ahead with TimeShared VM Scheduling.")
+        new VmSchedulerTimeShared()
+
     })
 
   }
@@ -66,8 +73,7 @@ object commonutils {
     val host_bw: Long = config.getLong("datacenter.host2.bw")
     val vmscheduler: String = config.getString("datacenter.host2.vmscheduler")
 
-    //logger.info(s"Created one processing element")
-    //new HostSimple(hosts_ram, host_bw, storage, peList.asJava)
+    logger.info("Creating Datacenter hosts based on the Datacenter config.")
 
     val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
     host.setVmScheduler(vmscheduler match {
@@ -75,7 +81,10 @@ object commonutils {
         new VmSchedulerSpaceShared()
       case "TimeShared" =>
         new VmSchedulerTimeShared()
-      case _ => new VmSchedulerTimeShared()
+      case _ =>
+        logger.warn("VM Scheduling algorithm should be either TimeShared or SpaceShared.")
+        logger.info("Going ahead with TimeShared VM Scheduling.")
+        new VmSchedulerTimeShared()
     })
 
   }
@@ -90,8 +99,8 @@ object commonutils {
     val host_bw: Long = config.getLong("datacenter.host3.bw")
     val vmscheduler: String = config.getString("datacenter.host3.vmscheduler")
 
-    //logger.info(s"Created one processing element")
-    //new HostSimple(hosts_ram, host_bw, storage, peList.asJava)
+    logger.info("Creating Datacenter hosts based on the Datacenter config.")
+
 
     val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
     host.setVmScheduler(vmscheduler match {
@@ -99,7 +108,10 @@ object commonutils {
         new VmSchedulerSpaceShared()
       case "TimeShared" =>
         new VmSchedulerTimeShared()
-      case _ => new VmSchedulerTimeShared()
+      case _ =>
+        logger.warn("VM Scheduling algorithm should be either TimeShared or SpaceShared.")
+        logger.info("Going ahead with TimeShared VM Scheduling.")
+        new VmSchedulerTimeShared()
     })
 
   }
@@ -114,7 +126,10 @@ object commonutils {
     policy match {
       case "FirstFit" => new VmAllocationPolicyFirstFit()
       case "BestFit" => new VmAllocationPolicyBestFit()
-      case _ => new VmAllocationPolicySimple()
+      case _ =>
+        logger.warn("VM Allocation Policy should be either Simple, FirstFit or BestFit.")
+        logger.info("Going ahead with Simple VM Allocation Policy.")
+        new VmAllocationPolicySimple()
     }
   }
 
@@ -133,7 +148,10 @@ object commonutils {
     val dataCenter = config.getString("datacenter.dcType")  match {
       case "Simple" => new DatacenterSimple (cloudSim, hostList.asJava).setSchedulingInterval(scheduling_Interval)
       case "Network" => new NetworkDatacenter (cloudSim, hostList.asJava, getVmAllocationPolicy (config.getString ("datacenter.vmAllocationPolicy") ) ).setSchedulingInterval(scheduling_Interval)
-      case _ => new DatacenterSimple (cloudSim, hostList.asJava)
+      case _ =>
+        logger.warn("Datacenter type should be either Simple or Network.")
+        logger.info("Going ahead with creating a Simple Datacenter.")
+        new DatacenterSimple (cloudSim, hostList.asJava)
 
     }
 
