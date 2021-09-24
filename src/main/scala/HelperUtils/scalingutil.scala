@@ -1,7 +1,13 @@
 package HelperUtils
 
+import org.cloudbus.cloudsim.brokers.DatacenterBrokerSimple
 import org.cloudbus.cloudsim.vms.Vm
 import org.cloudsimplus.autoscaling.{HorizontalVmScaling, HorizontalVmScalingSimple}
+import org.cloudbus.cloudsim.cloudlets.Cloudlet
+import org.cloudsimplus.listeners.EventInfo
+
+import java.util
+import scala.jdk.CollectionConverters.*
 
 
 object scalingutil {
@@ -27,6 +33,7 @@ object scalingutil {
   }
 
   def isVmOverloaded(vm: Vm): Boolean = {
-    vm.getCpuPercentUtilization > 0.8
+    vm.getCpuPercentUtilization > 0.05
   }
+
 }

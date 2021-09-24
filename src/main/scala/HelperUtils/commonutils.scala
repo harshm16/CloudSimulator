@@ -119,7 +119,7 @@ object commonutils {
   }
 
   /**
-   * Creates Datacenters based on the conf file
+   * Creates scalable Datacenters based on the conf file
    *
    * @param cloudSim     CloudSim Object
    * @param hostList     List of hosts present in the Datacenter
@@ -128,12 +128,13 @@ object commonutils {
    */
 
 
-  def createDatacenter (cloudSim: CloudSim,hostList: List[Host],config: Config): Datacenter = {
+  def createDatacenter (cloudSim: CloudSim,hostList: List[Host],config: Config, scheduling_Interval: Int = 0): Datacenter = {
     // Check type and create that DataCenter
     val dataCenter = config.getString("datacenter.dcType")  match {
-      case "Simple" => new DatacenterSimple(cloudSim, hostList.asJava)
-      case "Network" => new NetworkDatacenter(cloudSim, hostList.asJava, getVmAllocationPolicy(config.getString("datacenter.vmAllocationPolicy")))
-      case _ => new DatacenterSimple(cloudSim, hostList.asJava)
+      case "Simple" => new DatacenterSimple (cloudSim, hostList.asJava).setSchedulingInterval(scheduling_Interval)
+      case "Network" => new NetworkDatacenter (cloudSim, hostList.asJava, getVmAllocationPolicy (config.getString ("datacenter.vmAllocationPolicy") ) ).setSchedulingInterval(scheduling_Interval)
+      case _ => new DatacenterSimple (cloudSim, hostList.asJava)
+
     }
 
     // Set all the costs
