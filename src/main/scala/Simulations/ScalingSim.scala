@@ -36,12 +36,10 @@ object ScalingSim:
 
     //Create all hosts using the createHost function
     val hostList = (1 to config.getInt("datacenter.host.number")).map(_ => createHost(config)).toList
-    logger.info(s"Created hosts")
+    logger.info(s"Created hosts: $hostList")
 
-    //Create datacenter using the above created hosts and a VM allocation policy
-    //new NetworkDatacenter(cloudsim, hostList.asJava, new VmAllocationPolicyBestFit())
+    //Time interval after which the Datacenter schedules creation of new VMs
     val SCHEDULING_INTERVAL: Int = 5
-    val CLOUDLETS_CREATION_INTERVAL = SCHEDULING_INTERVAL * 2
 
     createDatacenter(cloudsim, hostList,config,SCHEDULING_INTERVAL)
     logger.info(s"Created a scalable Datacenter.")
@@ -49,32 +47,33 @@ object ScalingSim:
     //Create a Datacenter Broker
     val broker = new DatacenterBrokerSimple(cloudsim)
     broker.setVmDestructionDelay(10.0)
+
     //Class used to fetch the VMs and Cloudlets info from the config file and append them in separate lists
     val simpleJob = new createvmcloudlet_SaaS(cloudsim, broker, serviceModel)
-    logger.info(s"Created a list of Cloudlets")
+    logger.info("Created a list of Cloudlets")
 
     val vmQuantity = config.getInt("datacenter.vm.vm-number")
 
     val vmList = createInitialScalableVms(simpleJob,vmQuantity)
-    logger.info(s"Created a list of Scalable VMs")
+    logger.info("Created a list of Scalable VMs")
 
     //Submit the VMs list & Cloudlets to the Datacenter broker
     broker.submitVmList(vmList.asJava)
+    logger.info(s"Submitted the list of VMs to the broker: $vmList")
 
     broker.submitCloudletList(simpleJob.createCloudletSimpleList.asJava)
 
     logger.info("Starting cloud simulation...")
     cloudsim.start()
-    //val finishedCloudlets = broker.getCloudletFinishedList
-    //createNewCloudlets(CLOUDLETS_CREATION_INTERVAL,simpleJob,broker)
+
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
     val createdVM = broker.getVmCreatedList()
     logger.info(s"Created VM list: $createdVM")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
-    val CloudCreaetedList = broker.getCloudletCreatedList()
-    logger.info(s"List of cloudlets created inside some Vm.: $CloudCreaetedList")
+    val CloudCreatedList = broker.getCloudletCreatedList()
+    logger.info(s"List of cloudlets created inside some Vm.: $CloudCreatedList")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
     val finishedCloudlets: util.List[Cloudlet] = broker.getCloudletFinishedList()

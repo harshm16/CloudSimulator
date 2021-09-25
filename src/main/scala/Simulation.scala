@@ -24,7 +24,7 @@ object Simulation:
 
     The config file which can be modified by the user: user_IaaS.conf
     */
-    IaasSim.Start()
+    //IaasSim.Start()
 
     /***
     Platform as a Service Simulation:
@@ -50,7 +50,7 @@ object Simulation:
 
     The config file which can be modified by the user: user_IaaS.conf, user_PaaS.conf, user_SaaS.conf
      */
-    //DatacenterNetworking.Start()
+    DatacenterNetworking.Start()
 
     /***
     Horizontal Scaling Simulation:

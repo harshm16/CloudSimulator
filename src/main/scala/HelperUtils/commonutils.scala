@@ -45,13 +45,13 @@ object commonutils {
     val host_bw: Long = config.getLong("datacenter.host.bw")
     val vmscheduler: String = config.getString("datacenter.host.vmscheduler")
 
-    logger.info("Creating Datacenter hosts based on the Datacenter config.")
-
     val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
     host.setVmScheduler(vmscheduler match {
       case "SpaceShared" =>
+        logger.info("Space Shared VM Scheduling is enabled.")
         new VmSchedulerSpaceShared()
       case "TimeShared" =>
+        logger.info("Time Shared VM Scheduling is enabled.")
         new VmSchedulerTimeShared()
       case _ =>
         logger.warn("VM Scheduling algorithm should be either TimeShared or SpaceShared.")
@@ -73,13 +73,14 @@ object commonutils {
     val host_bw: Long = config.getLong("datacenter.host2.bw")
     val vmscheduler: String = config.getString("datacenter.host2.vmscheduler")
 
-    logger.info("Creating Datacenter hosts based on the Datacenter config.")
 
     val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
     host.setVmScheduler(vmscheduler match {
       case "SpaceShared" =>
+        logger.info("Space Shared VM Scheduling is enabled.")
         new VmSchedulerSpaceShared()
       case "TimeShared" =>
+        logger.info("Time Shared VM Scheduling is enabled.")
         new VmSchedulerTimeShared()
       case _ =>
         logger.warn("VM Scheduling algorithm should be either TimeShared or SpaceShared.")
@@ -99,14 +100,14 @@ object commonutils {
     val host_bw: Long = config.getLong("datacenter.host3.bw")
     val vmscheduler: String = config.getString("datacenter.host3.vmscheduler")
 
-    logger.info("Creating Datacenter hosts based on the Datacenter config.")
-
 
     val host = new NetworkHost(hosts_ram, host_bw, storage, peList.asJava)
     host.setVmScheduler(vmscheduler match {
       case "SpaceShared" =>
+        logger.info("Space Shared VM Scheduling is enabled.")
         new VmSchedulerSpaceShared()
       case "TimeShared" =>
+        logger.info("Time Shared VM Scheduling is enabled.")
         new VmSchedulerTimeShared()
       case _ =>
         logger.warn("VM Scheduling algorithm should be either TimeShared or SpaceShared.")

@@ -32,23 +32,24 @@ object PaasSim:
 
     //Create all hosts using the createHost function
     val hostList = (1 to config.getInt("datacenter.host.number")).map(_ => createHost(config)).toList
-    logger.info(s"Created hosts")
+    logger.info(s"Created hosts: $hostList")
 
     //Create datacenter using the above created hosts and a VM allocation policy
     //new NetworkDatacenter(cloudsim, hostList.asJava, new VmAllocationPolicyBestFit())
     createDatacenter(cloudsim, hostList,config)
-    logger.info(s"Created Virtual machines.")
+    logger.info("Created Datacenter.")
 
     //Create a Datacenter Broker
     val broker = new DatacenterBrokerSimple(cloudsim)
 
     //Class used to fetch the VMs and Cloudlets info from the config file and append them in separate lists
     val simpleJob = new createvmcloudlet_PaaS(cloudsim, broker, serviceModel)
-    logger.info(s"Created a list of VMs and Cloudlets")
+    logger.info("Created a list of VMs and Cloudlets")
 
     //Submit the VMs list & Cloudlets to the Datacenter broker
     broker.submitVmList(simpleJob.createVMList.asJava)
     broker.submitCloudletList(simpleJob.createCloudletSimpleList.asJava)
+    logger.info("Submitted the list of VMs and Cloudlets to the broker.")
 
     logger.info("Starting cloud simulation...")
     cloudsim.start()
@@ -60,8 +61,8 @@ object PaasSim:
     logger.info(s"Created VM list: $createdVM")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
-    val CloudCreaetedList = broker.getCloudletCreatedList()
-    logger.info(s"List of cloudlets created inside some Vm.: $CloudCreaetedList")
+    val CloudCreatedList = broker.getCloudletCreatedList()
+    logger.info(s"List of cloudlets created inside some Vm.: $CloudCreatedList")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
     val finishedCloudlets: util.List[Cloudlet] = broker.getCloudletFinishedList()

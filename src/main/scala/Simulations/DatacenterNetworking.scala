@@ -26,6 +26,8 @@ object DatacenterNetworking:
 
   def Start() =
     logger.info("Simulating Multiple Datacenter Networking architecture")
+    logger.info("Networking Architecture based on Brite Topology.")
+
 
     //Initiate Cloudsim
     val cloudsim = new CloudSim()
@@ -40,21 +42,21 @@ object DatacenterNetworking:
 
     //Create all hosts using the createHost function
     val hostList = (1 to config.getInt("datacenter.host.number")).map(_ => createHost(config)).toList
-    logger.info("Created IaaS hosts")
+    logger.info(s"Created IaaS hosts: $hostList")
 
     val hostList2 = (1 to config.getInt("datacenter.host2.number")).map(_ => createHost2(config)).toList
-    logger.info("Created PaaS hosts")
+    logger.info(s"Created PaaS hosts: $hostList2")
 
     val hostList3 = (1 to config.getInt("datacenter.host3.number")).map(_ => createHost3(config)).toList
-    logger.info("Created SaaS hosts")
+    logger.info(s"Created SaaS hosts: $hostList3")
 
     //Create datacenter using the above created hosts and a VM allocation policy
     val dc1 = createDatacenter(cloudsim, hostList,config)
-    logger.info("Created IaaS Datacenter.")
+    logger.info(s"Created IaaS Datacenter: $dc1")
     val dc2 = createDatacenter(cloudsim, hostList2,config)
-    logger.info("Created PaaS Datacenter.")
+    logger.info(s"Created PaaS Datacenter: $dc2")
     val dc3 = createDatacenter(cloudsim, hostList3,config)
-    logger.info("Created SaaS Datacenter.")
+    logger.info(s"Created SaaS Datacenter: $dc3")
 
     //Create a Datacenter Broker
     val broker = new DatacenterBrokerSimple(cloudsim)
@@ -92,6 +94,7 @@ object DatacenterNetworking:
 
 
     broker.submitVmList(vmList)
+    logger.info(s"Submited the list of VMs to the Datacenter broker: $vmList")
 
     // create and submit Cloudlets to broker
     val cloudletList = new util.ArrayList[Cloudlet]
@@ -101,6 +104,8 @@ object DatacenterNetworking:
     cloudletList.addAll(vmcloudlet_Saas.createCloudletSimpleList.asJava)
 
     broker.submitCloudletList(cloudletList)
+    logger.info(s"Submited the list of Cloudlets to the Datacenter broker: $cloudletList")
+
 
     logger.info("Starting cloud simulation...")
     cloudsim.start()
@@ -112,8 +117,8 @@ object DatacenterNetworking:
     logger.info(s"Created VM list: $createdVM")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
-    val CloudCreaetedList = broker.getCloudletCreatedList()
-    logger.info(s"List of cloudlets created inside some Vm.: $CloudCreaetedList")
+    val CloudCreatedList = broker.getCloudletCreatedList()
+    logger.info(s"List of cloudlets created inside some Vm.: $CloudCreatedList")
     System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n\n")
 
     val finishedCloudlets: util.List[Cloudlet] = broker.getCloudletFinishedList()
